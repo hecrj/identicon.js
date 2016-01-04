@@ -8,13 +8,18 @@
  * Copyright 2013, Stewart Lord
  * Released under the BSD license
  * http://www.opensource.org/licenses/bsd-license.php
+ *
+ * Copyright 2016, Héctor Ramón
+ * Released under the MIT License
+ * https://opensource.org/licenses/MIT
  */
 
 (function() {
-    Identicon = function(hash, size, margin){
-        this.hash   = hash;
-        this.size   = size   || 64;
-        this.margin = margin || .08;
+    Identicon = function(hash, options){
+        this.hash            = hash;
+        this.size            = options.size   || 64;
+        this.margin          = options.margin || 0;
+        this.backgroundColor = options.backgroundColor  || [240, 240, 240, 255];
     }
 
     Identicon.prototype = {
@@ -27,13 +32,11 @@
                 size    = this.size,
                 margin  = Math.floor(size * this.margin),
                 cell    = Math.floor((size - (margin * 2)) / 5),
-                image   = new PNGlib(size, size, 256);
+                image   = new PNGlib(size, size, 256),
+                bg      = image.color.apply(image, this.backgroundColor),
 
-            // light-grey background
-            var bg      = image.color(240, 240, 240);
-
-            // foreground is last 7 chars as hue at 50% saturation, 70% brightness
-            var rgb     = this.hsl2rgb(parseInt(hash.substr(-7), 16) / 0xfffffff, .5, .7),
+                // foreground is last 7 chars as hue at 50% saturation, 70% brightness
+                rgb     = this.hsl2rgb(parseInt(hash.substr(-7), 16) / 0xfffffff, .5, .7),
                 fg      = image.color(rgb[0] * 255, rgb[1] * 255, rgb[2] * 255);
 
             // the first 15 characters of the hash control the pixels (even/odd)
