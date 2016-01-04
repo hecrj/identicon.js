@@ -18,7 +18,7 @@
     Identicon = function(hash, options){
         this.hash            = hash;
         this.size            = options.size   || 64;
-        this.margin          = options.margin || 0;
+        this.margin          = options.margin || .08;
         this.backgroundColor = options.backgroundColor  || [240, 240, 240, 255];
     }
 
